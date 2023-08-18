@@ -2,7 +2,7 @@ include <Nopscadlib/utils/core/core.scad>
 use <Nopscadlib/utils/layout.scad>
 include <Nopscadlib/vitamins/extrusions.scad>
 include <NopSCADlib/lib.scad> 
-
+//发布到github上
 
 lizhu_height=1500;
 zhijia_length_up=700;
