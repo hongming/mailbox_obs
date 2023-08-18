@@ -6,14 +6,41 @@ include <NopSCADlib/lib.scad>
 
 lizhu_height=1500;
 zhijia_length_up=700;
-zhijia_angle_up=30;
+zhijia_angle_up=15;
 zhijia_length_down=1500;
-zhijia_angle_down=30;
+zhijia_angle_down=15;
 
 
+
+
+
+//单个三叉戟
+for(i=[[0,0,0],[800,0,0],[1600,0,0],[2400,0,0],
+
+[0,1500,0],[800,1500,0],[1600,1500,0],[2400,1500,0]    
+
+])
+translate(i){
+    //滑轮
+translate([25,-6.5,10]){
+    color("red",0.5)
+mini_v();}
+  sanchaji();  
+    }
+
+
+//地面轨道
+translate([0,10,10])
+rotate([0,90,0])
+extrusion(E2020,1000,center=false);
+
+
+
+module sanchaji(){
+translate([5,-16.5,-15]){
 cube([40,10,lizhu_height]);
 //上边
-translate([0,0,800]){
+translate([0,20,800]){
 translate([30,-10,10])
 zhijia(zhijia_length_up,zhijia_angle_up);
 translate([10,-10,10])
@@ -24,7 +51,7 @@ translate([30,-10,10])
 zhijia(zhijia_length_down,zhijia_angle_down);
 translate([10,-10,10])
 zhijia(zhijia_length_down,360-zhijia_angle_down);}
-
+}}
 
 module zhijia(h,angle){
     rotate([0,angle,0])
@@ -45,21 +72,6 @@ translate([10,5,10])
 
 }
 }
-
-////滑轮
-//translate([25,-6.5,10]){
-//mini_v();
-////三叉戟
-//    translate([0,-10,-25])
-//sanchaji();}
-
-
-//地面轨道
-//translate([0,10,10])
-//rotate([0,90,0])
-//extrusion(E2020,1000,center=false);
-
-
 
 //滑轮
 module mini_v() {
