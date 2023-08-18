@@ -6,18 +6,17 @@ include <NopSCADlib/lib.scad>
 
 lizhu_height=1500;
 zhijia_length_up=700;
-zhijia_angle_up=15;
+zhijia_angle_up=0;
 zhijia_length_down=1500;
-zhijia_angle_down=15;
+zhijia_angle_down=20;
 
 
 
 
 
 //单个三叉戟
-for(i=[[0,0,0],[800,0,0],[1600,0,0],[2400,0,0],
-
-[0,1500,0],[800,1500,0],[1600,1500,0],[2400,1500,0]    
+for(i=[[0,0,0]
+//    ,[800,0,0],[1600,0,0],[2400,0,0],[0,1500,0],[800,1500,0],[1600,1500,0],[2400,1500,0]    
 
 ])
 translate(i){
@@ -38,7 +37,15 @@ extrusion(E2020,1000,center=false);
 
 module sanchaji(){
 translate([5,-16.5,-15]){
+union(){    
 cube([40,10,lizhu_height]);
+  
+  for(i=[[20,5,15],[20,5,25],[20,5,35]])  {
+    translate(i)
+    rotate([90,0,0]){
+        color("red")
+        cylinder(20,2,2,center=true);}
+}}
 //上边
 translate([0,20,800]){
 translate([30,-10,10])
@@ -56,20 +63,27 @@ zhijia(zhijia_length_down,360-zhijia_angle_down);}
 module zhijia(h,angle){
     rotate([0,angle,0])
     translate([-10,0,-10])
-difference(){
+
 union(){
 translate([0,0,10])
+    color("black",0.5)
+    //长杆
     cube([20,10,h-10]);
+    translate([0,0,h])
+    cube([20,h,10]);
 
 translate([10,5,10])
     rotate([90,0,0]){
+        color("black",0.5)
+    //圆头
         cylinder(10,10,10,center=true);}
-    }
+
 
 translate([10,5,10])
     rotate([90,0,0]){
-        cylinder(40,2,2,center=true);}
-
+        color("red")
+        cylinder(20,2,2,center=true);}
+    
 }
 }
 
