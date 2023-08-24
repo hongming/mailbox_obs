@@ -4,91 +4,205 @@ include <Nopscadlib/vitamins/extrusions.scad>
 include <NopSCADlib/lib.scad> 
 //发布到github上
 
-lizhu_height=1500;
-zhijia_length_up=700;
-zhijia_angle_up=0;
-zhijia_length_down=1500;
-zhijia_angle_down=20;
+base_height=800;
+base_width=1400;
+base_length=1600;
+base_rail_length=2600;
 
 
+cover_height=400;
+cover_width=1400;
+cover_length=1600;
+cover_rail_length=1500;
 
+//mount
+translate([base_width/2+100,base_width/2,0])
+intersection()
+for(mount=[-6:6])
+for(x=[1:6]){
 
-
-//单个三叉戟
-for(i=[[0,0,0]
-//    ,[800,0,0],[1600,0,0],[2400,0,0],[0,1500,0],[800,1500,0],[1600,1500,0],[2400,1500,0]    
-
-])
-translate(i){
-    //滑轮
-translate([25,-6.5,10]){
-    color("red",0.5)
-mini_v();}
-  sanchaji();  
+mount(15*mount,15*x);
+}
+module mount(x,y){
+cylinder(h=800,r=100,center=false);
+translate([0,0,100+800])
+rotate([0,x,0]){
+rotate([90,0,0])
+cylinder(h=300,r=100,center=true);
+//SbS双镜
+rotate([0,0,y]){
+translate([-350,-500,100])
+cube([700,1000,400]);}
+//重锤    
+translate([-100,150,-800])
+cube([200,200,800]);
+    }
     }
 
 
-//地面轨道
-translate([0,10,10])
-rotate([0,90,0])
-extrusion(E2020,1000,center=false);
+//底座
+    //四根竖立杆
+    translate([10,10,0])
+    extrusion(E2020,base_height,center=false);
+    translate([10,base_width+10,0])
+    extrusion(E2020,base_height,center=false);
+    translate([base_length+10,10,0])
+    extrusion(E2020,base_height-20,center=false);
+    translate([base_length+10,base_width+10,0])
+    color("red")
+    extrusion(E2020,base_height-20,center=false);
+
+    //上方轨道
+    translate([20,10,base_height-10])
+    rotate([0,90,0])
+    extrusion(E2020,base_rail_length,center=false);
+
+    translate([20,base_width+10,base_height-10])
+    rotate([0,90,0])
+    extrusion(E2020,base_rail_length,center=false);
 
 
+    //底座和上方固定
+    translate([20,10,10])
+    rotate([0,90,0])
+    extrusion(E2020,base_length-20,center=false);
 
-module sanchaji(){
-translate([5,-16.5,-15]){
-union(){    
-cube([40,10,lizhu_height]);
-  
-  for(i=[[20,5,15],[20,5,25],[20,5,35]])  {
-    translate(i)
-    rotate([90,0,0]){
-        color("red")
-        cylinder(20,2,2,center=true);}
-}}
-//上边
-translate([0,20,800]){
-translate([30,-10,10])
-zhijia(zhijia_length_up,zhijia_angle_up);
-translate([10,-10,10])
-zhijia(zhijia_length_up,360-zhijia_angle_up);}
-//下边
-translate([0,0,50]){
-translate([30,-10,10])
-zhijia(zhijia_length_down,zhijia_angle_down);
-translate([10,-10,10])
-zhijia(zhijia_length_down,360-zhijia_angle_down);}
-}}
+    translate([20,base_width+10,10])
+    rotate([0,90,0])
+    extrusion(E2020,base_length-20,center=false);
 
-module zhijia(h,angle){
-    rotate([0,angle,0])
-    translate([-10,0,-10])
+    translate([10,base_width,10])
+    rotate([90,0,0])
+    extrusion(E2020,base_width-20,center=false);
+    translate([base_length+10,base_width,10])
+    rotate([90,0,0])
+    extrusion(E2020,base_width-20,center=false);
 
-union(){
-translate([0,0,10])
-    color("black",0.5)
-    //长杆
-    cube([20,10,h-10]);
-    translate([0,0,h])
-    cube([20,h,10]);
+    translate([0,0,base_height-40])
+    {
+        translate([10,base_width,10+20])
+    rotate([90,0,0])
+    extrusion(E2020,base_width-20,center=false);
+    translate([base_length+10,base_width,10])
+    rotate([90,0,0])
+    extrusion(E2020,base_width-20,center=false);
+        }
 
-translate([10,5,10])
-    rotate([90,0,0]){
-        color("black",0.5)
-    //圆头
-        cylinder(10,10,10,center=true);}
-
-
-translate([10,5,10])
-    rotate([90,0,0]){
-        color("red")
-        cylinder(20,2,2,center=true);}
+//外部泡沫-底部
+    translate([0,-50,0])
+        color("grey",0.2)
+        cube([base_length+20,50,base_height-20]);
+   
+    translate([0,base_width+20,0])
+        color("grey",0.2)
+        cube([base_length+20,50,base_height-20]);
     
-}
-}
+    
+    translate([-50,-50-50,0])
+        color("yellow",0.2)
+        cube([50,base_width+20+100+50+50,base_height+cover_height+6.5]);
+        
+    translate([base_length+20,-50,0])
+        color("grey",0.2)
+        cube([50,base_width+20+100,base_height-20]);
+
+
+
+//顶部盖子
+translate([1600,0,base_height+6]){
+//translate([0,0,0]){
+    //四根竖立杆
+    translate([10,10,0])
+    extrusion(E2020,cover_height,center=false);
+    translate([10,cover_width+10,0])
+    extrusion(E2020,cover_height,center=false);
+    translate([cover_length+10,10,0])
+    extrusion(E2020,cover_height-20,center=false);
+    translate([cover_length+10,cover_width+10,0])
+    extrusion(E2020,cover_height-20,center=false);
+
+    //上方轨道
+    translate([20,10,cover_height-10])
+    rotate([0,90,0])
+    extrusion(E2020,cover_rail_length,center=false);
+
+    translate([20,cover_width+10,cover_height-10])
+    rotate([0,90,0])
+    extrusion(E2020,cover_rail_length,center=false);
+
+
+    //底座和上方固定
+    translate([20,10,10]){
+    rotate([0,90,0])
+    color("red")
+    extrusion(E2020,cover_length-20,center=false);
+        //一侧滑轮
+        translate([25,0,-10])
+            mini_v();
+        translate([base_rail_length-cover_length-100,0,-10])
+            mini_v();
+        translate([(base_rail_length-cover_length)/2,0,-10])
+            mini_v();
+        //另一侧滑轮
+        translate([25,cover_width,-10])
+            mini_v();
+        translate([base_rail_length-cover_length-100,cover_width,-10])
+            mini_v();
+        translate([(base_rail_length-cover_length)/2,cover_width,-10])
+            mini_v();
+        }
+
+    translate([20,cover_width+10,10])
+    rotate([0,90,0])
+    color("blue")
+    extrusion(E2020,cover_length-20,center=false);
+
+
+    translate([cover_length+10,cover_width,10])
+    rotate([90,0,0])
+    extrusion(E2020,cover_width-20,center=false);
+
+    translate([0,0,cover_height-20])
+    {
+        translate([10,cover_width,10])
+    rotate([90,0,0])
+    extrusion(E2020,cover_width-20,center=false);
+    translate([cover_length+10,cover_width,10])
+    rotate([90,0,0])
+    extrusion(E2020,cover_width-20,center=false);
+        }
+
+
+//顶部盖子-泡沫
+    translate([0,-50,0])
+        color("grey",0.2)
+        cube([cover_length+20,50,cover_height]);
+    translate([0,-100,-100])
+        color("green",0.2)
+        cube([cover_length+20,50,cover_height+100]);
+        
+    translate([0,cover_width+20,0])
+        color("grey",0.2)
+        cube([cover_length+20,50,cover_height]);
+        
+    translate([0,cover_width+20+50,-100])
+        color("grey",0.2)
+        cube([cover_length+20,50,cover_height+100]);      
+        
+    translate([cover_length+20,-50-50,-100])
+        color("yellow",0.2)
+        cube([50,cover_width+50+50+20+50+50,cover_height+100]);
+        
+    translate([-20-50-50,-100-20,cover_height])
+        color("red",0.2)
+        cube([cover_length+50+20+50+40+50,cover_width+50+50+20+100+40,100]);
+    }
+
 
 //滑轮
 module mini_v() {
-rotate([0,0,180])
+color("red")
+rotate([90,0,0])
 translate([0,-6,0])
 import("Mini_V_Gantry_Kit.stl");}
+
