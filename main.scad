@@ -5,39 +5,60 @@ include <NopSCADlib/lib.scad>
 //发布到github上
 
 base_height=800;
-base_width=1400;
-base_length=1600;
-base_rail_length=2600;
+base_width=2000;
+base_length=1800;
+base_rail_length=3800;
 
 
 cover_height=400;
-cover_width=1400;
-cover_length=1600;
+cover_width=2000;
+cover_length=1800;
 cover_rail_length=1500;
 
 //mount
-translate([base_width/2+100,base_width/2,0])
+translate([base_length/2,base_width/2+100,0]){
 intersection()
-for(mount=[-6:6])
-for(x=[1:6]){
+{
+    for(y=[-1:5])
+for(x=[0:3])
+{
 
-mount(15*mount,15*x);
+mount(30*x,30*y);
+}}
+
+intersection(){
+    for(y=[-5:1])
+for(x=[-3:0])
+{
+
+mount(30*x,30*y);
+}}
+
 }
+
+
+
+
 module mount(x,y){
-cylinder(h=800,r=100,center=false);
-translate([0,0,100+800])
+
+cylinder(h=950,r=100,center=false);
+translate([0,0,950])
+
+rotate([30,0,0]){
 rotate([0,x,0]){
-rotate([90,0,0])
-cylinder(h=300,r=100,center=true);
+    rotate([90,0,0])
+color("red",0.1)
+cylinder(h=300,r=230,center=true);
 //SbS双镜
 rotate([0,0,y]){
-translate([-350,-500,100])
-cube([700,1000,400]);}
+translate([-350,-500,230])
+cube([600,1300,350]);}
 //重锤    
-translate([-100,150,-800])
-cube([200,200,800]);
-    }
-    }
+translate([-100,150,-600])
+cube([200,200,600]);
+                }
+               }
+                }
 
 
 //底座
@@ -109,7 +130,7 @@ cube([200,200,800]);
 
 
 //顶部盖子
-translate([1600,0,base_height+6]){
+translate([2000,0,base_height+6]){
 //translate([0,0,0]){
     //四根竖立杆
     translate([10,10,0])
